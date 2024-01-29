@@ -1,9 +1,13 @@
 # Dreamless
 
-Dreamless es un launcher personalizado para Minecraft, diseñado para una instalación fácil y el acceso rápido al juego. Este proyecto es una creación de Aarón Wayas. Es totalmente gratuito
+Dreamless es un launcher personalizado para Minecraft, diseñado para una instalación fácil y el acceso rápido al juego. Este proyecto es una creación de Aarón Wayas. Es totalmente gratuito, Open Source
 
 - GitHub: [aaronwayas](https://github.com/aaronwayas)
-- Discord: aaronwayas
+- Discord: Server: [Dreamless](https://discord.gg/UwNm2QZCJv)
+- User: aaronwayas
+
+![image](https://github.com/aaronwayas/Dreamless/assets/110739797/3f6b2d41-4659-4167-b979-8770b4a3cf21)
+
 
 ## Instalación y Configuración
 
@@ -41,7 +45,7 @@ Si deseas contribuir al desarrollo de Dreamless, sigue estos pasos:
 
 ## Licencia
 
-Este proyecto está bajo la licencia [nombre de la licencia]. Ver el archivo `LICENSE` para más detalles.
+Este proyecto está bajo la licencia [MIT](LICENSE). Ver el archivo `LICENSE` para más detalles.
 
 ## Contacto
 
