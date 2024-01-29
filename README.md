@@ -27,13 +27,7 @@ Para instalar Dreamless y comenzar a jugar, sigue estos pasos:
     python install.py
     ```
 
-4. Después de la instalación, abre el juego mediante:
-
-    ```bash
-    python Dreamless/main.py
-    ```
-
-Asegúrate de que el juego se ejecuta desde la carpeta "Dreamless".
+4. Después de la instalación, abre el juego se abre inmediatamente.
 
 ## Contribución
 
