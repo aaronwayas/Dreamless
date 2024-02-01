@@ -18,7 +18,8 @@ title_dreamless = Fore.RED + """
 menu_options = """
     1. Run Minecraft
     2. Install Minecraft
-    3. Exit
+    3. List Installed Versions
+    4. Exit
 """
 
 if os.path.exists(file_path):
@@ -31,15 +32,24 @@ else:
 
 user_window = os.environ["USERNAME"]
 user_pc = os.getlogin()
-minecraft_directory = f"C:/Users/{user_window}/AppData/Roaming/.minecraftLauncher"
+minecraft_directory = f"C:/Users/{user_window}/AppData/Roaming/.minecraft"
 
-def install_minecraft():
-    version = input("Version of Minecraft to install: ")
-    if version:
-        minecraft_launcher_lib.install.install_minecraft_version(version, minecraft_directory)
-        print(f'Installed version {version}')
+def list_installed_versions():
+    versions_path = os.path.join(minecraft_directory, 'versions')
+    
+    if os.path.exists(versions_path):
+        installed_versions = [version for version in os.listdir(versions_path) if os.path.isdir(os.path.join(versions_path, version))]
+        
+        if installed_versions:
+            print("Installed Minecraft Versions:")
+            for version in installed_versions:
+                print(f" - {version}")
+        else:
+            print("No Minecraft versions installed.")
     else:
-        print('No version entered')
+        print("Minecraft versions directory not found.")
+
+
 
 def run_minecraft():
     mine_user = input("Enter your Minecraft username: ")
@@ -81,6 +91,9 @@ def menu():
         elif choice == "2":
             install_normal_versions()
         elif choice == "3":
+            list_installed_versions()
+            input("Press Enter to continue...")
+        elif choice == "4":
             break
         else:
             print("Invalid option. Please select a valid option.")

@@ -28,10 +28,11 @@ def installDreamless():
             os.system('cls')
             print(title_dreamless)
             print("Now downloading...")
-            time.sleep(2)
+            time.sleep(1.5)
             os.system('pip install -r Dreamless/requirements.txt')
             print("")
-            input("note: Press enter to exit")
+            input("Press enter to execute Dreamless ")
+            os.system('python Dreamless/main.py')
             break
         elif input1 == "2":
             os.system('cls')
