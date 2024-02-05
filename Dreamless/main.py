@@ -1,101 +1,128 @@
-import minecraft_launcher_lib
 import os
-from colorama import init, Fore
 import subprocess
+from colorama import init, Fore
+import minecraft_launcher_lib
 
-file_path = 'configuration.txt'
-information = []
+class MinecraftManager:
+    title_dreamless = Fore.RED + """
+        ·▄▄▄▄  ▄▄▄  ▄▄▄ . ▄▄▄· • ▌ ▄ ·. ▄▄▌  ▄▄▄ ..▄▄ · .▄▄ · 
+        ██▪ ██ ▀▄ █·▀▄.▀·▐█ ▀█ ·██ ▐███▪██•  ▀▄.▀·▐█ ▀. ▐█ ▀. 
+        ▐█· ▐█▌▐▀▀▄ ▐▀▀▪▄▄█▀▀█ ▐█ ▌▐▌▐█·██▪  ▐▀▀▪▄▄▀▀▀█▄▄▀▀▀█▄
+        ██. ██ ▐█•█▌▐█▄▄▌▐█ ▪▐▌██ ██▌▐█▌▐█▌▐▌▐█▄▄▌▐█▄▪▐█▐█▄▪▐█
+        ▀▀▀▀▀• .▀  ▀ ▀▀▀  ▀  ▀ ▀▀  █▪▀▀▀.▀▀▀  ▀▀▀  ▀▀▀▀  ▀▀▀▀ 
+                                                by: Aaron v.0.1
+    """ + Fore.RESET
 
-title_dreamless = Fore.RED + """
-    ·▄▄▄▄  ▄▄▄  ▄▄▄ . ▄▄▄· • ▌ ▄ ·. ▄▄▌  ▄▄▄ ..▄▄ · .▄▄ · 
-    ██▪ ██ ▀▄ █·▀▄.▀·▐█ ▀█ ·██ ▐███▪██•  ▀▄.▀·▐█ ▀. ▐█ ▀. 
-    ▐█· ▐█▌▐▀▀▄ ▐▀▀▪▄▄█▀▀█ ▐█ ▌▐▌▐█·██▪  ▐▀▀▪▄▄▀▀▀█▄▄▀▀▀█▄
-    ██. ██ ▐█•█▌▐█▄▄▌▐█ ▪▐▌██ ██▌▐█▌▐█▌▐▌▐█▄▄▌▐█▄▪▐█▐█▄▪▐█
-    ▀▀▀▀▀• .▀  ▀ ▀▀▀  ▀  ▀ ▀▀  █▪▀▀▀.▀▀▀  ▀▀▀  ▀▀▀▀  ▀▀▀▀ 
-                                            by: Aaron v.0.1
-""" + Fore.RESET
-
-menu_options = """
+    menu_options = """
     1. Run Minecraft
     2. Install Minecraft
     3. List Installed Versions
     4. Exit
-"""
-
-if os.path.exists(file_path):
-    with open(file_path, 'r') as file:
-        for line in file:
-            information.append(line)
-else:
-    with open(file_path, 'w') as file:
-        file.write(' ')
-
-user_window = os.environ["USERNAME"]
-user_pc = os.getlogin()
-minecraft_directory = f"C:/Users/{user_window}/AppData/Roaming/.minecraft"
-
-def list_installed_versions():
-    versions_path = os.path.join(minecraft_directory, 'versions')
-    
-    if os.path.exists(versions_path):
-        installed_versions = [version for version in os.listdir(versions_path) if os.path.isdir(os.path.join(versions_path, version))]
-        
-        if installed_versions:
-            print("Installed Minecraft Versions:")
-            for version in installed_versions:
-                print(f" - {version}")
-        else:
-            print("No Minecraft versions installed.")
-    else:
-        print("Minecraft versions directory not found.")
+    """
+    def __init__(self):
+        self.file_path = 'configuration.txt'
+        self.information = []
+        self.current_max = 0
+        self.minecraft_directory = minecraft_launcher_lib.utils.get_minecraft_directory()
 
 
+    def read_configuration(self):
+        try:
+            if os.path.exists(self.file_path):
+                with open(self.file_path, 'r') as file:
+                    self.information = [line.strip() for line in file]
+        except Exception as e:
+            print(f"Error reading configuration file: {e}")
 
-def run_minecraft():
-    mine_user = input("Enter your Minecraft username: ")
-    version = input("Enter the Minecraft version to run: ")
-    ram = f"-Xmx{input('Enter the amount of RAM in GB (e.g., 4):')}G"
+    def write_configuration(self, username, ram):
+        try:
+            with open(self.file_path, 'w') as file:
+                file.write(username + '\n')
+                file.write(str(ram) + '\n')
+        except Exception as e:
+            print(f"Error writing to configuration file: {e}")
 
-    options = {
-        'username': mine_user,
-        'uuid': '',
-        'token': '',
-        'jvArguments': [ram, ram],
-        'launcherVersion': "0.0.2"
-    }
+    def set_status(self, status):
+        print(status)
 
-    with open(file_path, 'w') as file:
-        file.writelines(mine_user)
-        file.writelines(str(ram))
+    def set_progress(self, progress):
+        if self.current_max != 0:
+            print(f"{progress}/{self.current_max}")
 
-    minecraft_command = minecraft_launcher_lib.command.get_minecraft_command(version, minecraft_directory, options)
-    subprocess.run(minecraft_command)
+    def set_max(self, new_max):
+        self.current_max = new_max
 
-def install_normal_versions():
-    version = input("Enter the Minecraft version to install: ")
-    if version:
-        minecraft_launcher_lib.install.install_minecraft_version(version, minecraft_directory)
-        print(f'Installed version {version}')
-    else:
-        print('No version entered')
+    def list_installed_versions(self):
+        try:
+            versions_path = os.path.join(self.minecraft_directory, 'versions')
+            if os.path.exists(versions_path):
+                installed_versions = [version for version in os.listdir(versions_path) if os.path.isdir(os.path.join(versions_path, version))]
+                if installed_versions:
+                    print("Installed Minecraft Versions:")
+                    for version in installed_versions:
+                        print(f" - {version}")
+                else:
+                    print("No Minecraft versions installed.")
+            else:
+                print("Minecraft versions directory not found.")
+        except Exception as e:
+            print(f"Error listing installed versions: {e}")
 
-def menu():
-    while True:
-        os.system('cls')
-        print(title_dreamless)
-        print(menu_options)
-        choice = input(f"{Fore.CYAN}{user_pc}{Fore.RESET} >> ")
+    def run_minecraft(self):
+        try:
+            mine_user = input("Enter your Minecraft username: ")
+            version = input("Enter the Minecraft version to run: ")
+            ram = f"-Xmx{input('Enter the amount of RAM in GB (e.g., 4):')}G"
 
-        if choice == "1":
-            run_minecraft()
-        elif choice == "2":
-            install_normal_versions()
-        elif choice == "3":
-            list_installed_versions()
-            input("Press Enter to continue...")
-        elif choice == "4":
-            break
-        else:
-            print("Invalid option. Please select a valid option.")
+            options = {
+                'username': mine_user,
+                'uuid': '',
+                'token': '',
+                'jvArguments': [ram, ram],
+                'launcherVersion': "0.0.2"
+            }
 
-menu()
+            self.write_configuration(mine_user, ram)
+            minecraft_command = minecraft_launcher_lib.command.get_minecraft_command(version, self.minecraft_directory, options)
+            subprocess.run(minecraft_command)
+        except Exception as e:
+            print(f"Error running Minecraft: {e}")
+
+    def install_version(self):
+        try:
+            versionMC = input("Enter the Minecraft version to install: ")
+            if versionMC:
+                minecraft_launcher_lib.install.install_minecraft_version(versionMC, self.minecraft_directory, callback=self.callback)
+                print(f'Installed version {versionMC}')
+            else:
+                print('No version entered')
+        except Exception as e:
+            print(f"Error installing Minecraft version: {e}")
+
+    def Dreamless(self):
+        try:
+            user_pc = os.getlogin()
+
+            while True:
+                print(self.title_dreamless)
+                print(self.menu_options)
+
+                option = input(f"{Fore.CYAN}{user_pc}{Fore.RESET} >> ")
+                if option == "1":
+                    self.run_minecraft()
+                elif option == "2":
+                    self.install_version()
+                elif option == "3":
+                    self.list_installed_versions()
+                    input("Press Enter to continue...")
+                elif option == "4":
+                    break
+                else:
+                    print("Invalid option. Please select a valid option.")
+        except Exception as e:
+            print(f"Error in Dreamless: {e}")
+
+if __name__ == "__main__":
+    minecraft_manager = MinecraftManager()
+    minecraft_manager.read_configuration()
+    minecraft_manager.Dreamless()
