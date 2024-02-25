@@ -1,2 +1,0 @@
-minecraft_launcher_lib
-colorama
