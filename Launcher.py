@@ -7,10 +7,16 @@ import webbrowser
 import Download
 import json
 import os
+# se importa la clase de las validaciones 
+from validations import Cls_validations
 
 
 app = ctk.CTk()
-app.geometry("1280x800")
+# Obtener longitudes de la pantalla 
+scr_width = app.winfo_screenwidth()
+scr_height = app.winfo_screenheight()
+# Se le resta -150 al ancho que tenga la pantalla y -120 al alto para centrar 
+app.geometry("{}x{}".format(scr_width-150,scr_height-120))
 app.title("Dreamless")
 app._set_appearance_mode("light")
 app.config(bg="#FFFFFF")
@@ -19,17 +25,17 @@ app.iconbitmap("assets/images/icon.ico")
 
 # Functions
 
-try:
-    minecraft_directory = (
-        mclib.utils.get_minecraft_directory()
-    )  # Directorio de Minecraft predeterminado
-except:
-    usr_window = os.getlogin()
-    minecraft_directory = f"C:/Users/{usr_window}/AppData/Roaming/.minecraftLauncher"  # Directorio de Minecraft
+usr_window = os.getlogin()    
+minecraft_directory = f"C:/Users/{usr_window}/AppData/Roaming/.minecraftLauncher"
+# se crea un objeto de la clase que valida la existencia de la carpeta
+objValidatios = Cls_validations.minecraft_folder(minecraft_directory)
 
-versions_installed = [
-    version["id"] for version in mclib.utils.get_installed_versions(minecraft_directory)
-]
+if objValidatios == False:
+    versions_installed = ["No versions installed"]
+else:
+    versions_installed = [
+        version["id"] for version in mclib.utils.get_installed_versions(minecraft_directory)
+    ]
 
 def read_config_file(filename):
     try:

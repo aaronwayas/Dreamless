@@ -7,13 +7,8 @@ import os
 
 logging.basicConfig(filename="error.log", level=logging.ERROR)
 
-try:
-    minecraft_directory = (
-        mclib.utils.get_minecraft_directory()
-    )  # Directorio de Minecraft predeterminado
-except:
-    usr_window = os.getlogin()
-    minecraft_directory = f"C:/Users/{usr_window}/AppData/Roaming/.minecraftLauncher"  # Directorio de Minecraft
+usr_window = os.getlogin()
+minecraft_directory = f"C:/Users/{usr_window}/AppData/Roaming/.minecraftLauncher"  # Directorio de Minecraft
 
 
 def list_install_versions():
