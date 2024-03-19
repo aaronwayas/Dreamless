@@ -3,7 +3,14 @@ from CTkMessagebox import CTkMessagebox
 import customtkinter as ctk
 import logging
 import os
+import threading
 
+
+
+
+# variable de control para deterner el progressbar
+global controlBar
+controlBar = True
 
 logging.basicConfig(filename="error.log", level=logging.ERROR)
 
@@ -23,6 +30,15 @@ def list_install_versions():
 def download_version():
     download_vrs = versions_to_install.get()
 
+    # Se establece el inicio y el lugar del progressbar
+    # Se recomienda separar el front del back
+    progressbar.start()
+    progressbar.place(
+    x=28.0,
+    y=263.0,              
+    )
+    controlBar = False
+    
     if download_vrs:
         try:
             mclib.install.install_minecraft_version(download_vrs, minecraft_directory)
@@ -40,11 +56,22 @@ def download_version():
     else:
         logging.error("No version provided")
         CTkMessagebox(title="Error", message="No version provided", icon="cancel")
+    
+    # Se cambia el valor de la variable, se detiene el progressbar y se oculta
+    if controlBar == False:
+        progressbar.stop()
+        progressbar.place_forget()
+
+
+# Se crea la función para manejar la descarga por medio de un hilo
+def thread_download():
+    thd_download = threading.Thread(target=download_version)
+    thd_download.start()
 
 
 def Download():
     global versions_to_install
-
+    global progressbar
     window = ctk.CTk()
     window.geometry("788x448")
     window.configure(bg="#FFFFFF")
@@ -112,7 +139,7 @@ def Download():
 
     install_button = ctk.CTkButton(
         window,
-        command=download_version,
+        command=thread_download,# Se llama a la función con el hilo
         width=480.0,
         text="Download",
         fg_color="#801AE5",
@@ -127,6 +154,22 @@ def Download():
         x=28.0,
         y=206.0,
     )
+
+    # Agrego barra de progreso de descarga
+    progressbar = ctk.CTkProgressBar(
+        window,
+        width=480.0,
+        height=7,
+        orientation='horizontal',
+        corner_radius=20, 
+        fg_color="#ab7d55",
+        progress_color='#66a33b',
+        bg_color="white",
+        mode='indeterminate',
+        determinate_speed=5,
+        )
+
+    progressbar.set(0)
 
     close_button = ctk.CTkButton(
         window,
