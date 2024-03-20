@@ -39,23 +39,37 @@ def download_version():
     )
     controlBar = False
     
+
     if download_vrs:
         try:
             mclib.install.install_minecraft_version(download_vrs, minecraft_directory)
             logging.info("Downloaded successfully: %s", download_vrs)
             CTkMessagebox(
-                title="Success", message="Downloaded successfully", icon="check"
+                title="Success",
+                message="Downloaded successfully",
+                icon="check",
+                bg_color="#FFFFFF",
+                text_color="#863bb4",
+                font=("SplineSans Bold", 17),
+                fg_color="#FFFFFF",
+                title_color="black",
+                button_color="#801AE5",
+                button_hover_color="#A95EFF",
             )
         except Exception as e:
             logging.error("Error downloading version %s: %s", download_vrs, str(e))
             CTkMessagebox(
-                title="Error",
-                message="Something went wrong!!!, show the log",
-                icon="cancel",
+                title="Success",
+                message="Error downloading version",
+                icon="check",
+                bg_color="#FFFFFF",
+                text_color="#863bb4",
+                font=("SplineSans Bold", 17),
+                fg_color="#FFFFFF",
+                title_color="black",
+                button_color="#801AE5",
+                button_hover_color="#A95EFF",
             )
-    else:
-        logging.error("No version provided")
-        CTkMessagebox(title="Error", message="No version provided", icon="cancel")
     
     # Se cambia el valor de la variable, se detiene el progressbar y se oculta
     if controlBar == False:
