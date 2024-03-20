@@ -1,13 +1,41 @@
 import customtkinter as ctk
 from tkinter import Canvas
 import json
-
+from CTkMessagebox import CTkMessagebox
 
 def save_config():
     try:
+        if not username_entry.get() or not ram_combo.get():
+            CTkMessagebox(
+                title="Error",
+                message="Please fill in all fields",
+                icon="cancel",
+                bg_color="#FFFFFF",
+                text_color="#863bb4",
+                font=("SplineSans Bold", 17),
+                fg_color="#FFFFFF",
+                title_color="black",
+                button_color="#801AE5",
+                button_hover_color="#A95EFF",
+            )
+            return
+
         config_data = {"username": username_entry.get(), "ram": str(ram_combo.get())}
         with open("config.json", "w") as file:
             json.dump(config_data, file, indent=4)
+        CTkMessagebox(
+            title="Success",
+            message="Settings saved successfully",
+            icon="check",
+            bg_color="#FFFFFF",
+            text_color="#863bb4",
+            font=("SplineSans Bold", 17),
+            fg_color="#FFFFFF",
+            title_color="black",
+            button_color="#801AE5",
+            button_hover_color="#A95EFF",
+        )
+
     except Exception as e:
         print(f"Error writing to configuration file: {e}")
 
