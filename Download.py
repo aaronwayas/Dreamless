@@ -5,9 +5,6 @@ import logging
 import os
 import threading
 
-
-
-
 # variable de control para deterner el progressbar
 global controlBar
 controlBar = True
