@@ -6,10 +6,9 @@ import subprocess
 import webbrowser
 import Download
 import json
-import os
+from config import *
 # se importa la clase de las validaciones 
 from validations import Cls_validations
-
 
 app = ctk.CTk()
 # Obtener longitudes de la pantalla 
@@ -24,9 +23,6 @@ app.iconbitmap("assets/images/icon.ico")
 
 
 # Functions
-
-usr_window = os.getlogin()    
-minecraft_directory = f"C:/Users/{usr_window}/AppData/Roaming/.minecraftLauncher"
 # se crea un objeto de la clase que valida la existencia de la carpeta
 objValidatios = Cls_validations.minecraft_folder(minecraft_directory)
 
@@ -45,7 +41,6 @@ def read_config_file(filename):
     except Exception as e:
         print(f"Error reading config file: {e}")
         return None, None
-
 
 def run_minecraft():
     try:
@@ -70,6 +65,29 @@ def run_minecraft():
         subprocess.run(minecraft_command)
     except Exception as e:
         print(f"Error running Minecraft: {e}")
+
+def download_vanilla_or_forge(app):
+    window = ctk.CTk()
+    window.geometry("200x200")
+    window.configure(bg="#FFFFFF")
+    window.title("Dreamless - Download")
+    window._set_appearance_mode("light")
+    window.iconbitmap("assets/images/icon.ico")
+
+    download_label = ctk.CTkLabel(
+    window,
+    text="Download",
+    text_color="black",
+    bg_color="#FFFFFF",
+    font=("SplineSans", 17, "bold"),
+    cursor="hand2",
+    )
+
+    download_label.place(relx=0.55, rely=0.063, anchor="center")
+    download_label.bind("<Button-1>", lambda event: Download.Download(app))
+
+    window.mainloop()
+
 
 
 # Canvas
@@ -96,7 +114,7 @@ download_label = ctk.CTkLabel(
 
 download_label.place(relx=0.55, rely=0.063, anchor="center")
 
-download_label.bind("<Button-1>", lambda event: Download.Download())
+download_label.bind("<Button-1>", lambda event: download_vanilla_or_forge(app))
 
 settings_label = ctk.CTkLabel(
     app,
