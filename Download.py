@@ -1,43 +1,36 @@
+import threading
+import logging
 import minecraft_launcher_lib as mclib
 from CTkMessagebox import CTkMessagebox
 import customtkinter as ctk
-import logging
 import os
-import threading
+from validations import Cls_validations
 
-# variable de control para deterner el progressbar
-global controlBar
-controlBar = True
+
+usr_window = os.getlogin()    
+minecraft_directory = f"C:/Users/{usr_window}/AppData/Roaming/.minecraftLauncher"
 
 logging.basicConfig(filename="error.log", level=logging.ERROR)
 
-usr_window = os.getlogin()
-minecraft_directory = f"C:/Users/{usr_window}/AppData/Roaming/.minecraftLauncher"  # Directorio de Minecraft
+# Variable global para controlar la visibilidad de la barra de progreso
+global progressbar_visible
+progressbar_visible = False
 
-
-def list_install_versions():
-    list1 = mclib.utils.get_available_versions(minecraft_directory)
-    release_versions = [
-        version["id"] for version in list1 if version["type"] == "release"
-    ]
-    for version in release_versions:
-        print(version)
-
-
-def download_version():
+def download_version(pantalla):
+    global progressbar_visible
+    
     download_vrs = versions_to_install.get()
 
-    # Se establece el inicio y el lugar del progressbar
-    # Se recomienda separar el front del back
-    progressbar.start()
-    progressbar.place(
-    x=28.0,
-    y=263.0,              
-    )
-    controlBar = False
-    
-
+    # Se establece el inicio del progressbar si hay algo que descargar
     if download_vrs:
+        # Se cambia la visibilidad de la barra de progreso y se inicia
+        progressbar_visible = True
+        progressbar.place(
+            x=28.0,
+            y=263.0,
+        )
+        progressbar.start()
+        
         try:
             mclib.install.install_minecraft_version(download_vrs, minecraft_directory)
             logging.info("Downloaded successfully: %s", download_vrs)
@@ -56,9 +49,9 @@ def download_version():
         except Exception as e:
             logging.error("Error downloading version %s: %s", download_vrs, str(e))
             CTkMessagebox(
-                title="Success",
+                title="Error",
                 message="Error downloading version",
-                icon="check",
+                icon="error",
                 bg_color="#FFFFFF",
                 text_color="#863bb4",
                 font=("SplineSans Bold", 17),
@@ -67,20 +60,18 @@ def download_version():
                 button_color="#801AE5",
                 button_hover_color="#A95EFF",
             )
-    
-    # Se cambia el valor de la variable, se detiene el progressbar y se oculta
-    if controlBar == False:
+        
+        # Al finalizar la descarga, se detiene la barra de progreso y se oculta
         progressbar.stop()
         progressbar.place_forget()
+        progressbar_visible = False
+        actualizar_versiones(pantalla)
 
-
-# Se crea la función para manejar la descarga por medio de un hilo
-def thread_download():
-    thd_download = threading.Thread(target=download_version)
+def thread_download(pantalla):
+    thd_download = threading.Thread(target=download_version, args=(pantalla,))
     thd_download.start()
 
-
-def Download():
+def Download(pantalla):
     global versions_to_install
     global progressbar
     window = ctk.CTk()
@@ -150,7 +141,7 @@ def Download():
 
     install_button = ctk.CTkButton(
         window,
-        command=thread_download,# Se llama a la función con el hilo
+        command=lambda: thread_download(pantalla),
         width=480.0,
         text="Download",
         fg_color="#801AE5",
@@ -166,7 +157,7 @@ def Download():
         y=206.0,
     )
 
-    # Agrego barra de progreso de descarga
+    global progressbar
     progressbar = ctk.CTkProgressBar(
         window,
         width=480.0,
@@ -202,7 +193,38 @@ def Download():
     window.resizable(False, False)
     window.mainloop()
 
+def actualizar_versiones(app):
+    objValidatios = Cls_validations.minecraft_folder(minecraft_directory)
+
+    if objValidatios == False:
+        versions_installed = ["No versions installed"]
+    else:
+        versions_installed = [
+            version["id"] for version in mclib.utils.get_installed_versions(minecraft_directory)
+        ]
+
+    versions = ctk.CTkComboBox(
+    app,
+    values=versions_installed,
+    bg_color="white",
+    fg_color="#EDE8F2",
+    text_color="#140C1C",
+    width=480.0,
+    height=56,
+    font=("SplineSans Bold", 20),
+    border_color="#EDE8F2",
+    button_color="#EDE8F2",
+    dropdown_fg_color="#EDE8F2",
+    dropdown_text_color="#140C1C",
+    dropdown_hover_color="#EDE8F2",
+    dropdown_font=("SplineSans Bold", 14),
+    corner_radius=15,
+    )
+
+    versions.place(
+        x=667.0,
+        y=157.0,
+    )
 
 if __name__ == "__main__":
-    # Si es así, llama a la función Download()
-    Download()
+    Download(None)
