@@ -51,9 +51,8 @@
 
 1. Clona el repositorio: `git clone https://github.com/aaronwayas/Dreamless.git`
 2. Navega al directorio del proyecto: `cd Dreamless`
-3. Crea un entorno virtual de Python: `python -m venv env`
-4. Instala las dependencias: `pip install -r requirements.txt`
-5. Ejecuta el launcher: `python Launcher.py`
+3. Instala las dependencias: `pip install -r requirements.txt`
+4. Ejecuta el launcher: `python Launcher.py`
 
     Si tienes problemas, puedes contactar conmigo en <p href="https://discord.gg/Cyq5zu72vE">Discord</p>
 
