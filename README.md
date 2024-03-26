@@ -54,7 +54,7 @@
 3. Instala las dependencias: `pip install -r requirements.txt`
 4. Ejecuta el launcher: `python Launcher.py`
 
-    Si tienes problemas, puedes contactar conmigo en <p href="https://discord.gg/Cyq5zu72vE">Discord</p>
+Si tienes problemas, puedes contactar con nosotros mediante el servidor de [Discord](https://discord.gg/Cyq5zu72vE)
 
 # Características
 
@@ -107,7 +107,7 @@ Todas las contribuciones son bienvenidas. Si debes hacer una contribución, pued
 
 # Contribuidores
 
-- [Aaron Wayas](https://github.com/aaronwayas)
+- [Aarón Wayas](https://github.com/aaronwayas)
 - [OscarMes](https://github.com/OscarMes)
 - [Irr22](https://github.com/Irr22)
 
