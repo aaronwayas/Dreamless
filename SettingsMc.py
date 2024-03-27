@@ -5,13 +5,21 @@ from CTkMessagebox import CTkMessagebox
 
 
 def read_json(user, ram):
-    with open("config.json") as f_json:
-        data = json.load(f_json)
-    username = data["username"]
-    gbram = data["ram"]
-    if username != "" and gbram != "":
-        user.insert(0,str(username))
-        ram.set(str(gbram))
+    try:
+        with open("config.json") as f_json:
+            data = json.load(f_json)
+        username = data.get("username", "")
+        gbram = data.get("ram", "")
+        if username and gbram:
+            user.insert(0, str(username))
+            ram.set(str(gbram))
+    except FileNotFoundError:
+        # Si el archivo no existe, se crea con valores predeterminados
+        config_data = {"username": "", "ram": ""}
+        with open("config.json", "w") as file:
+            json.dump(config_data, file, indent=4)
+    except Exception as e:
+        print(f"Error reading configuration file: {e}")
    
 
 def save_config():
