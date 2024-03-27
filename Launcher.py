@@ -13,10 +13,18 @@ from validations import Cls_validations
 
 app = ctk.CTk()
 # Obtener longitudes de la pantalla 
-scr_width = app.winfo_screenwidth()
-scr_height = app.winfo_screenheight()
+scr_width = app.winfo_screenwidth()-150
+scr_height = app.winfo_screenheight()-120
+
+#se obtienen las posiciones X y Y
+pos_x = (app.winfo_screenwidth()//2)-(scr_width//2)
+pos_y = (app.winfo_screenheight()//2)-(scr_height//2)
+
+
 # Se le resta -150 al ancho que tenga la pantalla y -120 al alto para centrar 
-app.geometry("{}x{}".format(scr_width-150,scr_height-120))
+# app.geometry("{}x{}+{}+{}".format(scr_width-150,scr_height-120,pos_x,pos_y))
+app.geometry("{}x{}+{}+{}".format(scr_width,scr_height,pos_x,pos_y))
+
 app.title("Dreamless")
 app._set_appearance_mode("light")
 app.config(bg="#FFFFFF")
@@ -242,6 +250,7 @@ canvas.create_text(
     fill="#140C1C",
     font=("SplineSans Medium", 16 * -1),
 )
+
 
 app.resizable(False, False)
 app.mainloop()

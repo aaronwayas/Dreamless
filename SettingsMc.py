@@ -3,6 +3,13 @@ from tkinter import Canvas
 import json
 from CTkMessagebox import CTkMessagebox
 
+def read_json(user, ram):
+    with open("config.json") as f_json:
+        data = json.load(f_json)
+    user.insert(0,str(data["username"]))
+    ram.set(str(data["ram"]))
+    
+
 def save_config():
     try:
         if not username_entry.get() or not ram_combo.get():
@@ -45,7 +52,9 @@ def Settings():
     global ram_combo
 
     settings_window = ctk.CTk()
-    settings_window.geometry("788x448")
+    pos_x = (settings_window.winfo_screenwidth()//2)-(788//2)
+    pos_y = (settings_window.winfo_screenheight()//2)-(448//2)
+    settings_window.geometry("{}x{}+{}+{}".format(788,448,pos_x,pos_y))
     settings_window.configure(bg="#FFFFFF")
     settings_window.title("Dreamless - Settings")
     settings_window._set_appearance_mode("light")
@@ -151,9 +160,14 @@ def Settings():
         x=555.0,
         y=391.0,
     )
+
+    read_json(username_entry, ram_combo)
+
     settings_window.resizable(False, False)
     settings_window.mainloop()
 
 
+
 if __name__ == "__main__":
     Settings()
+  
