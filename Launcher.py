@@ -1,30 +1,34 @@
-
 import minecraft_launcher_lib as mclib
 from tkinter import PhotoImage
+from CTkMessagebox import CTkMessagebox
 import customtkinter as ctk
 import SettingsMc
 import subprocess
 import webbrowser
 import Download
+import logging
 import json
 import os
-# se importa la clase de las validaciones 
+# se importa la clase de las validaciones
 from validations import Cls_validations
 
+logging.basicConfig(
+    level=logging.DEBUG, format="%(asctime)s - %(levelname)s - %(message)s"
+)
 
 app = ctk.CTk()
-# Obtener longitudes de la pantalla 
-scr_width = app.winfo_screenwidth()-150
-scr_height = app.winfo_screenheight()-120
+# Obtener longitudes de la pantalla
+scr_width = app.winfo_screenwidth() - 150
+scr_height = app.winfo_screenheight() - 120
 
-#se obtienen las posiciones X y Y
-pos_x = (app.winfo_screenwidth()//2)-(scr_width//2)
-pos_y = (app.winfo_screenheight()//2)-(scr_height//2)
+# se obtienen las posiciones X y Y
+pos_x = (app.winfo_screenwidth() // 2) - (scr_width // 2)
+pos_y = (app.winfo_screenheight() // 2) - (scr_height // 2)
 
 
-# Se le resta -150 al ancho que tenga la pantalla y -120 al alto para centrar 
+# Se le resta -150 al ancho que tenga la pantalla y -120 al alto para centrar
 # app.geometry("{}x{}+{}+{}".format(scr_width-150,scr_height-120,pos_x,pos_y))
-app.geometry("{}x{}+{}+{}".format(scr_width,scr_height,pos_x,pos_y))
+app.geometry("{}x{}+{}+{}".format(scr_width, scr_height, pos_x, pos_y))
 
 app.title("Dreamless")
 app._set_appearance_mode("light")
@@ -34,7 +38,7 @@ app.iconbitmap("assets/images/icon.ico")
 
 # Functions
 
-usr_window = os.getlogin()    
+usr_window = os.getlogin()
 minecraft_directory = f"C:/Users/{usr_window}/AppData/Roaming/.minecraftLauncher"
 # se crea un objeto de la clase que valida la existencia de la carpeta
 objValidatios = Cls_validations.minecraft_folder(minecraft_directory)
@@ -52,7 +56,6 @@ def read_config_file(filename):
             config_data = json.load(file)
             return config_data.get("username"), config_data.get("ram")
     except Exception as e:
-        print(f"Error reading config file: {e}")
         return None, None
 
 
@@ -60,7 +63,11 @@ def run_minecraft():
     try:
         mine_user, ram = read_config_file("config.json")
         if not mine_user or not ram:
-            print("Error: Missing username or ram in config file.")
+            show_messagebox(
+                "Error",
+                "Falta nombre de usuario o cantidad de RAM en configuración.",
+                14,
+            )
             return
 
         version = Download.versions.get()
@@ -77,8 +84,31 @@ def run_minecraft():
             version, minecraft_directory, options
         )
         subprocess.run(minecraft_command)
-    except Exception as e:
-        print(f"Error running Minecraft: {e}")
+
+    except (
+        mclib.exceptions.VersionNotFound,
+        mclib.exceptions.UnsupportedVersion,
+        mclib.exceptions.ExternalProgramError,
+        mclib.exceptions.PlatformNotSupported,
+    ) as e:
+        show_messagebox("Error", str(e))
+        logging.error("Error al ejecutar Minecraft: %s", str(e))
+
+
+def show_messagebox(title, message, font_size=17):
+    CTkMessagebox(
+        app,
+        title=title,
+        message=message,
+        icon="check" if title == "Success" else "cancel",
+        bg_color="#FFFFFF",
+        text_color="#863bb4",
+        font=("SplineSans Bold", font_size),
+        fg_color="#FFFFFF",
+        title_color="black",
+        button_color="#801AE5",
+        button_hover_color="#A95EFF",
+    )
 
 
 # Canvas
@@ -105,7 +135,7 @@ download_label = ctk.CTkLabel(
 
 download_label.place(relx=0.55, rely=0.063, anchor="center")
 
-download_label.bind("<Button-1>", lambda event: Download.Download(app,'forge'))
+download_label.bind("<Button-1>", lambda event: Download.Download(app, "vanilla"))
 
 settings_label = ctk.CTkLabel(
     app,
