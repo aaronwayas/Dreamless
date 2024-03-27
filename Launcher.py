@@ -1,3 +1,4 @@
+
 import minecraft_launcher_lib as mclib
 from tkinter import PhotoImage
 import customtkinter as ctk
@@ -62,7 +63,7 @@ def run_minecraft():
             print("Error: Missing username or ram in config file.")
             return
 
-        version = versions.get()
+        version = Download.versions.get()
         ram = f"-Xmx{ram}"
 
         options = {
@@ -104,7 +105,7 @@ download_label = ctk.CTkLabel(
 
 download_label.place(relx=0.55, rely=0.063, anchor="center")
 
-download_label.bind("<Button-1>", lambda event: Download.Download())
+download_label.bind("<Button-1>", lambda event: Download.Download(app,'forge'))
 
 settings_label = ctk.CTkLabel(
     app,
@@ -187,28 +188,7 @@ play_button.place(
     y=235.0,
 )
 
-versions = ctk.CTkComboBox(
-    app,
-    values=versions_installed,
-    bg_color="white",
-    fg_color="#EDE8F2",
-    text_color="#140C1C",
-    width=480.0,
-    height=56,
-    font=("SplineSans Bold", 20),
-    border_color="#EDE8F2",
-    button_color="#EDE8F2",
-    dropdown_fg_color="#EDE8F2",
-    dropdown_text_color="#140C1C",
-    dropdown_hover_color="#EDE8F2",
-    dropdown_font=("SplineSans Bold", 14),
-    corner_radius=15,
-)
-
-versions.place(
-    x=667.0,
-    y=157.0,
-)
+Download.actualizar_versiones(app)
 
 image_image_1 = PhotoImage(file="assets/images/image_1.png")
 image_1 = canvas.create_image(331.0, 367.0, image=image_image_1)
