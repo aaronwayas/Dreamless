@@ -3,6 +3,7 @@ from tkinter import Canvas
 import json
 from CTkMessagebox import CTkMessagebox
 
+
 def save_config():
     try:
         if not username_entry.get() or not ram_combo.get():
@@ -54,8 +55,8 @@ def Settings():
     canvas = Canvas(
         settings_window,
         bg="#FFFFFF",
-        height=448,
-        width=788,
+        height=900,
+        width=1000,
         bd=0,
         highlightthickness=0,
         relief="ridge",
@@ -107,6 +108,7 @@ def Settings():
         dropdown_text_color="#703ba6",
         button_color="#f5f0fa",
         button_hover_color="#d9c7eb",
+        dropdown_hover_color="#d9c7eb",
     )
 
     ram_combo.place(relx=0.225, rely=0.4, anchor="center")
