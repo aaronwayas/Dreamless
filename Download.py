@@ -150,43 +150,46 @@ def volver_a_llamar_download(pantalla,tipe,pantalla_borrar):
 def ver_versiones_forge(pantalla,tipe,window,entry_version):
     global versions_to_install
     global progressbar
-    versions_to_install = ctk.CTkComboBox(
-        window,
-        values=saver_versiones_instaladas_forge(entry_version.get()),
-        bg_color="white",
-        fg_color="#EDE8F2",
-        text_color="#140C1C",
-        width=508.0,
-        height=45,
-        font=("SplineSans Bold", 20),
-        border_color="#EDE8F2",
-        button_color="#EDE8F2",
-        dropdown_fg_color="#EDE8F2",
-        dropdown_text_color="#140C1C",
-        dropdown_hover_color="#EDE8F2",
-        dropdown_font=("SplineSans Bold", 14),
-        corner_radius=15,
-    )
+    if len(entry_version.get()) != 0:
+        versions_to_install = ctk.CTkComboBox(
+            window,
+            values=saver_versiones_instaladas_forge(entry_version.get()),
+            bg_color="white",
+            fg_color="#EDE8F2",
+            text_color="#140C1C",
+            width=508.0,
+            height=45,
+            font=("SplineSans Bold", 20),
+            border_color="#EDE8F2",
+            button_color="#EDE8F2",
+            dropdown_fg_color="#EDE8F2",
+            dropdown_text_color="#140C1C",
+            dropdown_hover_color="#EDE8F2",
+            dropdown_font=("SplineSans Bold", 14),
+            corner_radius=15,
+        )
 
-    versions_to_install.place(x=28.0, y=290.0)
+        versions_to_install.place(x=28.0, y=290.0)
 
-    install_button = ctk.CTkButton(
-        window,
-        command=lambda: thread_download(pantalla, tipe),
-        width=480.0,
-        text="Download",
-        fg_color="#801AE5",
-        hover_color="#A95EFF",
-        bg_color="white",
-        corner_radius=12.0,
-        text_color="white",
-        font=("SplineSans", 22),
-        height=49.93934631347656,
-    )
-    install_button.place(
-        x=28.0,
-        y=350.0,
-    )
+        install_button = ctk.CTkButton(
+            window,
+            command=lambda: thread_download(pantalla, tipe),
+            width=480.0,
+            text="Download",
+            fg_color="#801AE5",
+            hover_color="#A95EFF",
+            bg_color="white",
+            corner_radius=12.0,
+            text_color="white",
+            font=("SplineSans", 22),
+            height=49.93934631347656,
+        )
+        install_button.place(
+            x=28.0,
+            y=350.0,
+        )
+    else:
+        pass
 
 def Download(pantalla, tipe):
     global versions_to_install
