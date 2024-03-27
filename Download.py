@@ -205,8 +205,8 @@ def Download(pantalla, tipe):
     canvas = ctk.CTkCanvas(
         window,
         bg="#FFFFFF",
-        height=448,
-        width=788,
+        height=700,
+        width=1000,
         bd=0,
         highlightthickness=0,
         relief="ridge",
