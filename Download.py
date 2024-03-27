@@ -16,10 +16,24 @@ logging.basicConfig(filename="error.log", level=logging.ERROR)
 global progressbar_visible
 progressbar_visible = False
 
-def download_version(pantalla,tipe):
+def download_version(pantalla, tipe):
     global progressbar_visible
-    
-    if tipe == 'vanilla' or tipe == 'snapshot':
+
+    def show_messagebox(title, message, icon, font_size=17):
+        CTkMessagebox(
+            title=title,
+            message=message,
+            icon=icon,  #  check, cancel, info, question, warning
+            bg_color="#FFFFFF",
+            text_color="#863bb4",
+            font=("SplineSans Bold", font_size),
+            fg_color="#FFFFFF",
+            title_color="black",
+            button_color="#801AE5",
+            button_hover_color="#A95EFF",
+        )
+
+    if tipe == "vanilla" or tipe == "snapshot":
         download_vrs = versions_to_install.get()
 
         # Se establece el inicio del progressbar si hay algo que descargar
@@ -31,37 +45,15 @@ def download_version(pantalla,tipe):
                 y=263.0,
             )
             progressbar.start()
-            
             try:
                 mclib.install.install_minecraft_version(download_vrs, minecraft_directory)
                 logging.info("Downloaded successfully: %s", download_vrs)
-                CTkMessagebox(
-                    title="Success",
-                    message="Downloaded successfully",
-                    icon="check",
-                    bg_color="#FFFFFF",
-                    text_color="#863bb4",
-                    font=("SplineSans Bold", 17),
-                    fg_color="#FFFFFF",
-                    title_color="black",
-                    button_color="#801AE5",
-                    button_hover_color="#A95EFF",
-                )
+                show_messagebox("Success", "Downloaded successfully", "check")
+
             except Exception as e:
                 logging.error("Error downloading version %s: %s", download_vrs, str(e))
-                CTkMessagebox(
-                    title="Error",
-                    message="Error downloading version",
-                    icon="error",
-                    bg_color="#FFFFFF",
-                    text_color="#863bb4",
-                    font=("SplineSans Bold", 17),
-                    fg_color="#FFFFFF",
-                    title_color="black",
-                    button_color="#801AE5",
-                    button_hover_color="#A95EFF",
-                )
-            
+                show_messagebox("Error", "Error downloading version", "cancel")
+
             # Al finalizar la descarga, se detiene la barra de progreso y se oculta
             progressbar.stop()
             progressbar.place_forget()
@@ -79,37 +71,16 @@ def download_version(pantalla,tipe):
                 y=263.0,
             )
             progressbar.start()
-            
+
             try:
                 mclib.forge.install_forge_version(download_vrs, minecraft_directory)
                 logging.info("Downloaded successfully: %s", download_vrs)
-                CTkMessagebox(
-                    title="Success",
-                    message="Downloaded successfully",
-                    icon="check",
-                    bg_color="#FFFFFF",
-                    text_color="#863bb4",
-                    font=("SplineSans Bold", 17),
-                    fg_color="#FFFFFF",
-                    title_color="black",
-                    button_color="#801AE5",
-                    button_hover_color="#A95EFF",
-                )
+                show_messagebox("Success", "Downloaded successfully", "check")
+
             except Exception as e:
                 logging.error("Error downloading version %s: %s", download_vrs, str(e))
-                CTkMessagebox(
-                    title="Error",
-                    message="Error downloading version",
-                    icon="error",
-                    bg_color="#FFFFFF",
-                    text_color="#863bb4",
-                    font=("SplineSans Bold", 17),
-                    fg_color="#FFFFFF",
-                    title_color="black",
-                    button_color="#801AE5",
-                    button_hover_color="#A95EFF",
-                )
-            
+                show_messagebox("Error", "Error downloading version", "cancel")
+
             # Al finalizar la descarga, se detiene la barra de progreso y se oculta
             progressbar.stop()
             progressbar.place_forget()
@@ -503,4 +474,4 @@ def actualizar_versiones(app):
     )
 
 if __name__ == "__main__":
-    Download(None)
+    Download("", "vanilla")
