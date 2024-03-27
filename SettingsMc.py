@@ -7,8 +7,11 @@ from CTkMessagebox import CTkMessagebox
 def read_json(user, ram):
     with open("config.json") as f_json:
         data = json.load(f_json)
-    user.insert(0,str(data["username"]))
-    ram.set(str(data["ram"]))
+    username = data["username"]
+    gbram = data["ram"]
+    if username != "" and gbram != "":
+        user.insert(0,str(username))
+        ram.set(str(gbram))
    
 
 def save_config():
