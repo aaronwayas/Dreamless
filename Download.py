@@ -87,7 +87,9 @@ def Download():
     global versions_to_install
     global progressbar
     window = ctk.CTk()
-    window.geometry("788x448")
+    pos_x = (window.winfo_screenwidth()//2)-(788//2)
+    pos_y = (window.winfo_screenheight()//2)-(448//2)
+    window.geometry("{}x{}+{}+{}".format(788,448,pos_x,pos_y))
     window.configure(bg="#FFFFFF")
     window.title("Dreamless - Download")
     window._set_appearance_mode("light")
