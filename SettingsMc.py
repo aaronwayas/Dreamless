@@ -5,21 +5,10 @@ from CTkMessagebox import CTkMessagebox
 
 
 def read_json(user, ram):
-    try:
-        with open("config.json") as f_json:
-            data = json.load(f_json)
-        username = data.get("username", "")
-        gbram = data.get("ram", "")
-        if username and gbram:
-            user.insert(0, str(username))
-            ram.set(str(gbram))
-    except FileNotFoundError:
-        # Si el archivo no existe, se crea con valores predeterminados
-        config_data = {"username": "", "ram": ""}
-        with open("config.json", "w") as file:
-            json.dump(config_data, file, indent=4)
-    except Exception as e:
-        print(f"Error reading configuration file: {e}")
+    with open("config.json") as f_json:
+        data = json.load(f_json)
+    user.insert(0,str(data["username"]))
+    ram.set(str(data["ram"]))
    
 
 def save_config():
@@ -113,7 +102,7 @@ def Settings():
 
     ram_combo = ctk.CTkComboBox(
         settings_window,
-        values=["2GB", "4GB", "6GB", "8GB"],
+        values=["2", "4", "6", "8", "10"],
         font=("SplineSans", 14),
         width=300,
         height=40,
