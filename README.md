@@ -1,11 +1,9 @@
 
 <p align="center">
-  <img width="100px" src="assets\images\icon.ico" align="center" alt="Dreamless-Launcher" width="1px" />
+  <img width="100px" src="assets/icon.ico" align="center" alt="Dreamless-Launcher" width="1px" />
   <h2 align="center">Dreamless Launcher</h2>
   <p align="center">Launcher gratuito de Minecraft para Windows.</p>
 </p>
-
-
 
 <p align="center">
   <a>
@@ -49,10 +47,15 @@
 
 # Instalación
 
+Por codigo fuente:
 1. Clona el repositorio: `git clone https://github.com/aaronwayas/Dreamless.git`
 2. Navega al directorio del proyecto: `cd Dreamless`
 3. Instala las dependencias: `pip install -r requirements.txt`
-4. Ejecuta el launcher: `python Launcher.py`
+4. Ejecuta el launcher: `python main.py`
+
+Por ejecutable:
+1. Descarga la ultima versión de la ultima [Release](https://github.com/aaronwayas/Dreamless/releases/latest)
+2. Descomprime el archivo `.zip` o `.rar` y ejecuta el launcher: `Dreamless.exe`
 
 Si tienes problemas, puedes contactar con nosotros mediante el servidor de [Discord](https://discord.gg/Cyq5zu72vE)
 
@@ -80,20 +83,17 @@ Una vez que hayas ejecutado el launcher, verás la interfaz principal de Dreamle
 
 Pantalla principal
 
-<img src="https://github.com/aaronwayas/Dreamless/assets/110739797/b37de99f-ac83-4fd4-9f52-2501f706e8af" width="500px"></img>
+<img src="assets/screenshot.png" width="500px"></img>
 
 Pantalla de descargas
 
-<img src="https://github.com/aaronwayas/Dreamless/assets/110739797/617f24a6-a2b0-440c-bd2c-af6962857025" width="500px"></img>
+<img src="assets/screenshot2.png"></img>
 
 Pantalla de configuración
 
-<img src="https://github.com/aaronwayas/Dreamless/assets/110739797/33a5949f-484b-4566-acf5-f2e6b8460fac" width="500px"></img>
+<img src="assets/screenshot3.png"></img>
 
-
-></details>
-
-<br>
+</details>
 
 # Contribuir
 
@@ -122,6 +122,3 @@ Todas las contribuciones son bienvenidas. Si debes hacer una contribución, pued
 # Licencia
 
 Dreamless Launcher se distribuye bajo la [Licencia MIT](https://opensource.org/licenses/MIT). Consulta el archivo `LICENSE` para obtener más detalles.
-
-
-
