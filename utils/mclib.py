@@ -2,33 +2,35 @@ import minecraft_launcher_lib as mclib
 import os
 import subprocess
 import json
+import re
 
 
-usr_window = os.getlogin()
-minecraft_directory = f"C:/Users/{usr_window}/AppData/Roaming/.minecraftLauncher"
+minecraft_directory = os.path.join(os.getenv("APPDATA"), ".minecraft")
+config_path = "utils/config.json"
+
+
+def sort_versions(versions):
+    def version_key(version):
+        # Buscar la parte numérica principal
+        match = re.match(r"(\d+(\.\d+)+)", version)
+        if match:
+            return tuple(map(int, match.group(1).split(".")))
+        else:
+            return ()
+
+    return sorted(versions, key=version_key)
 
 
 # obtener las versiones instaladas
-def get_installed_versions(minecraft_directory: str, inverted: bool = False):
+def get_installed_versions(minecraft_directory: str):
     versions_installed = [
         version["id"]
         for version in mclib.utils.get_installed_versions(minecraft_directory)
     ]
 
-    def key_func(version):
-        # Verificar si la versión contiene letras
-        if any(char.isalpha() for char in version):
-            # Extraer los primeros dígitos numéricos de la versión
-            num_digits = next(
-                (i for i, char in enumerate(version) if not char.isdigit()), None
-            )
-            if num_digits is not None:
-                version = version[:num_digits]
+    versions_installed = sort_versions(versions_installed)
 
-        return tuple(map(int, version.split(".")))
-
-    # Regresa las versiones ordenadas, de menor a mayor
-    return sorted(versions_installed, key=key_func, reverse=inverted)
+    return versions_installed
 
 
 # obtener la configuracion

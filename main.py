@@ -15,7 +15,7 @@ def close_dialog(page: ft.Page):
 def get_versions():
     try:
         versions_installed = mclib.get_installed_versions(
-            mclib.minecraft_directory, True
+            mclib.minecraft_directory,
         )
         all_versions = mclib.get_all_versions()
     except Exception as e:
@@ -49,14 +49,22 @@ def download_vanilla(page: ft.Page):
     page.update()
 
     callback = {"setStatus": on_set_status}
-
     success = mclib.download_version(version, callback)
 
     if success:
         print(f"Download Version Complete: {version} in {mclib.minecraft_directory}")
         progress_bar_download.value = 1
+        page.dialog = create_alert_dialog(
+            page, "Success", "Download complete.", lambda _: close_dialog(page)
+        )
+        page.dialog.open = True
     else:
         print("Download failed.")
+        page.dialog = create_alert_dialog(
+            page, "Error", "Download failed.", lambda _: close_dialog(page)
+        )
+        page.dialog.open = True
+
     page.update()
 
 
@@ -75,13 +83,20 @@ def download_forge(page: ft.Page):
     page.update()
 
     callback = {"setStatus": on_set_status}
-
     success = mclib.download_forge_version(version, callback)
 
     if success:
         print(f"Download Version Complete: {version} in {mclib.minecraft_directory}")
+        page.dialog = create_alert_dialog(
+            page, "Success", "Download complete.", lambda _: close_dialog(page)
+        )
+        page.dialog.open = True
     else:
         print("Download failed.")
+        page.dialog = create_alert_dialog(
+            page, "Error", "Download failed.", lambda _: close_dialog(page)
+        )
+
     page.update()
 
 
@@ -89,15 +104,11 @@ def search_forge_version(page: ft.Page, e):
     version = mclib.get_forge_version(e.control.value)
     forge_version.value = version
     forge_version.options = [ft.dropdown.Option(version)]
-
     download_button.on_click = lambda e: download_forge(page)
-
     page.update()
 
 
 def select_version(page: ft.Page, e):
-    print(e.control.value)
-
     status_label.visible = False
     progress_bar_download.visible = False
 
@@ -107,24 +118,17 @@ def select_version(page: ft.Page, e):
         ]
         version_to_download.value = get_versions()[1][0]
         version_to_download.label = "Version"
-
         version_to_download.on_change = None
-
-        page.update()
-
     elif e.control.value == "Forge":
         version_to_download.options = [
             ft.dropdown.Option(version) for version in get_versions()[2]
         ]
-
         version_to_download.value = get_versions()[2][0]
-
         version_to_download.label = "Vanilla Version"
         forge_version.visible = True
-
         version_to_download.on_change = lambda e: search_forge_version(page, e)
 
-        page.update()
+    page.update()
 
 
 def create_alert_dialog(page, title: str, content: str, action):
@@ -147,7 +151,6 @@ def run_minecraft(page: ft.Page, e) -> None:
     version = dropdown_version.value
 
     if not username or not ram:
-        print("Error: Missing username or RAM in config file.")
         page.dialog = create_alert_dialog(
             page,
             "Error",
@@ -274,10 +277,8 @@ def main(page: ft.Page):
 
     page.title = "Dreamless"
     page.theme_mode = ft.ThemeMode.LIGHT
-    page.window_min_height = page.height / 2
-    page.window_min_width = page.width / 2
-
-    # page.window_always_on_top = True
+    page.window.min_height = page.height / 2
+    page.window.min_width = page.width / 2
 
     download_button = ft.FilledButton(
         content=ft.Text("Download", size=16, weight=ft.FontWeight.BOLD),
@@ -556,4 +557,4 @@ def main(page: ft.Page):
 
 
 if __name__ == "__main__":
-    ft.app(target=main, view=ft.FLET_APP)
+    ft.app(target=main, view=ft.FLET_APP, assets_dir="assets")
