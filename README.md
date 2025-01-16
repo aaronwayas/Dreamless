@@ -108,7 +108,7 @@ Todas las contribuciones son bienvenidas. Si debes hacer una contribución, pued
 # Contribuidores
 
 - [Aarón Wayas](https://github.com/aaronwayas)
-- [OscarMes](https://github.com/OscarMes)
+- [Oscar-Mesa](https://github.com/Oscar-Mesa)
 - [Irr22](https://github.com/Irr22)
 
 <br>
