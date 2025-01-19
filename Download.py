@@ -85,7 +85,7 @@ class ClsDownload:
         thd_download = threading.Thread(target=self.download_version, args=(pantalla,tipo))
         thd_download.start()
 
-    def saver_versiones_instaladas_forge(version):
+    def saver_versiones_instaladas_forge(self,version):
         numero = str(version)[2:]
         ultima_terminacion = None
         ultima_version = None
@@ -181,6 +181,26 @@ class ClsDownload:
                 y=coord_y,
             )
        
+       # función para crear botones dentro de la ventana de descarga
+        def btn_ventana_download(window,command,text,text_color,fg_color,hover_color,width,height,font,corner_radius,coord_x,coord_y):
+            install_button = ctk.CTkButton(
+                window,
+                command=command,
+                width=width,
+                text=text,
+                fg_color=fg_color,
+                hover_color=hover_color,
+                bg_color="white",
+                corner_radius=corner_radius,
+                text_color=text_color,
+                font=font,
+                height=height,
+            )
+            install_button.place(
+                x=coord_x,
+                y=coord_y,
+            )
+
         global versions_to_install
         global progressbar
         # Pantalla de Descarga
@@ -224,6 +244,7 @@ class ClsDownload:
             fill="#140C1C",
             font=("SplineSans Medium", 24 * -1),
         )
+        
         if tipo == 'vanilla':
             # Obtener las versiones disponibles
             available_versions = mclib.utils.get_available_versions(self.minecraft_directory)
@@ -308,25 +329,9 @@ class ClsDownload:
             )
             escoger_version.place(x=28.0, y=140.0)
 
-            install_button = ctk.CTkButton(
-                window,
-                command=lambda: self.ver_versiones_forge(window,tipo,window,escoger_version),
-                width=480.0,
-                text="Search",
-                fg_color="#801AE5",
-                hover_color="#A95EFF",
-                bg_color="white",
-                corner_radius=12.0,
-                text_color="white",
-                font=("SplineSans", 22),
-                height=49.93934631347656,
-            )
-            install_button.place(
-                x=28.0,
-                y=206.0,
-            )
+            self.install_button = btn_ventana_download(window,lambda: self.ver_versiones_forge(window,tipo,window,escoger_version),"Search","white","#801AE5","#A95EFF",480.0,49.93934631347656,("SplineSans", 22),12.0,28.0,206.0)
 
-        
+       
         global progressbar
         progressbar = ctk.CTkProgressBar(
             window,
@@ -343,23 +348,8 @@ class ClsDownload:
 
         progressbar.set(0)
 
-        close_button = ctk.CTkButton(
-            window,
-            command=window.destroy,
-            width=83.0,
-            height=40.0,
-            text="Close",
-            text_color="black",
-            fg_color="#EDE8F2",
-            hover_color="#faf4ff",
-            bg_color="white",
-            corner_radius=18.0,
-            font=("SplineSans", 14, "bold"),
-        )
-        close_button.place(
-            x=660.0,
-            y=391.0,
-        )
+        self.close_button = btn_ventana_download(window,window.destroy,"Close","black","#EDE8F2","#faf4ff",83.0,40.0,("SplineSans", 14, "bold"),18.0,660.0,391.0)
+        
         window.resizable(False, False)
         window.mainloop()
 
