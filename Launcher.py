@@ -1,4 +1,3 @@
-
 import minecraft_launcher_lib as mclib
 from tkinter import PhotoImage
 import customtkinter as ctk
@@ -10,6 +9,7 @@ import json
 import os
 # se importa la clase de las validaciones 
 from validations import Cls_validations
+from Download import ClsDownload
 
 
 app = ctk.CTk()
