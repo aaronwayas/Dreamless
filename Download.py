@@ -1,5 +1,4 @@
 import threading
-import logging
 import minecraft_launcher_lib as mclib
 from CTkMessagebox import CTkMessagebox
 import customtkinter as ctk
@@ -12,7 +11,7 @@ class ClsDownload:
         self.user_window = os.getlogin()
         self.minecraft_directory = f"C:/Users/{self.user_window}/AppData/Roaming/.minecraftLauncher"
         self.progressbar_visible = False
-
+        
     def show_messagebox(self,title, message, icon, font_size=17):
             CTkMessagebox(
                 title=title,
@@ -34,11 +33,11 @@ class ClsDownload:
             if download_vrs:
                 # Se cambia la visibilidad de la barra de progreso y se inicia
                 self.progressbar_visible = True
-                progressbar.place(
+                self.progressbar.place(
                     x=28.0,
                     y=263.0,
                 )
-                progressbar.start()
+                self.progressbar.start()
                 try:
                     mclib.install.install_minecraft_version(download_vrs, self.minecraft_directory)
                     #logging.info("Downloaded successfully: %s", download_vrs)
@@ -49,8 +48,8 @@ class ClsDownload:
                     self.show_messagebox("Error", "Error downloading version", "cancel")
 
                 # Al finalizar la descarga, se detiene la barra de progreso y se oculta
-                progressbar.stop()
-                progressbar.place_forget()
+                self.progressbar.stop()
+                self.progressbar.place_forget()
                 self.progressbar_visible = False
                 self.actualizar_versiones(pantalla)
         else:
@@ -60,11 +59,11 @@ class ClsDownload:
             if download_vrs:
                 # Se cambia la visibilidad de la barra de progreso y se inicia
                 self.progressbar_visible = True
-                progressbar.place(
+                self.progressbar.place(
                     x=28.0,
                     y=263.0,
                 )
-                progressbar.start()
+                self.progressbar.start()
 
                 try:
                     mclib.forge.install_forge_version(download_vrs, self.minecraft_directory)
@@ -76,8 +75,8 @@ class ClsDownload:
                     self.show_messagebox("Error", "Error downloading version", "cancel")
 
                 # Al finalizar la descarga, se detiene la barra de progreso y se oculta
-                progressbar.stop()
-                progressbar.place_forget()
+                self.progressbar.stop()
+                self.progressbar.place_forget()
                 self.progressbar_visible = False
                 self.actualizar_versiones(pantalla)
 
@@ -202,7 +201,6 @@ class ClsDownload:
             )
 
         global versions_to_install
-        global progressbar
         # Pantalla de Descarga
         window = ctk.CTk()
         pos_x = (window.winfo_screenwidth()//2)-(788//2)
@@ -314,6 +312,7 @@ class ClsDownload:
                 x=28.0,
                 y=206.0,
             )
+
         else:
             release_versions = []
             escoger_version = ctk.CTkEntry(
@@ -331,9 +330,7 @@ class ClsDownload:
 
             self.install_button = btn_ventana_download(window,lambda: self.ver_versiones_forge(window,tipo,window,escoger_version),"Search","white","#801AE5","#A95EFF",480.0,49.93934631347656,("SplineSans", 22),12.0,28.0,206.0)
 
-       
-        global progressbar
-        progressbar = ctk.CTkProgressBar(
+        self.progressbar = ctk.CTkProgressBar(
             window,
             width=480.0,
             height=7,
@@ -346,7 +343,7 @@ class ClsDownload:
             determinate_speed=5,
             )
 
-        progressbar.set(0)
+        self.progressbar.set(0)
 
         self.close_button = btn_ventana_download(window,window.destroy,"Close","black","#EDE8F2","#faf4ff",83.0,40.0,("SplineSans", 14, "bold"),18.0,660.0,391.0)
         
